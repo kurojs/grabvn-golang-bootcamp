@@ -7,13 +7,6 @@ import (
 	"strings"
 )
 
-const (
-	PARAMS_NUM = 3
-	FIRST_NUM  = 0
-	SECOND_NUM = 2
-	OP         = 1
-)
-
 func getPriority(param string) int {
 	switch param {
 	case "*", "/":
@@ -86,29 +79,30 @@ func Evaluate(exp *string) (float64, error) {
 			postfix = append(postfix, param)
 		case 1, 2: // if operator and add to stack
 			//compare to stack, if stack's op priority higher pop stack op
-			if len(stack) > 0 && getPriority(stack[0]) >= prio {
-				postfix = append(postfix, stack[0])
-				stack = stack[1:]
+			if len(stack) > 0 && getPriority(stack[len(stack)-1]) >= prio {
+				postfix = append(postfix, stack[len(stack)-1])
+				stack = stack[:len(stack)-1]
 			}
-			stack = append([]string{param}, stack...)
+			stack = append(stack, param)
 		case -1: // if "(" push to stack
-			stack = append([]string{param}, stack...)
+			stack = append(stack, param)
 		case -2: // if ")" pop all stack ulti meet "("
-			for len(stack) > 0 && stack[0] != "(" {
-				postfix = append(postfix, stack[0])
-				stack = stack[1:]
+			for len(stack) > 0 && stack[len(stack)-1] != "(" {
+				postfix = append(postfix, stack[len(stack)-1])
+				stack = stack[:len(stack)-1]
 			}
 
 			if len(stack) > 0 {
-				stack = stack[1:]
+				stack = stack[:len(stack)-1]
 			} else {
 				return 0, errors.New("Syntax error")
 			}
 		}
 	}
 
-	for _, op := range stack {
-		postfix = append(postfix, op)
+	for len(stack) > 0 {
+		postfix = append(postfix, stack[len(stack)-1])
+		stack = stack[:len(stack)-1]
 	}
 	// end convert
 
@@ -120,21 +114,22 @@ func Evaluate(exp *string) (float64, error) {
 				return 0, errors.New("Syntax error")
 			}
 
-			first := calStack[0]
-			second := calStack[1]
+			first := calStack[len(calStack)-2]
+			second := calStack[len(calStack)-1]
+			calStack = calStack[:len(calStack)-2]
+
 			result, err := cal(first, second, param)
 			if err != nil {
 				return result, err
 			}
 
-			calStack[1] = result
-			calStack = calStack[1:]
+			calStack = append(calStack, result)
 		} else {
 			num, err := getNumber(param)
 			if err != nil {
 				return 0, err
 			}
-			calStack = append([]float64{num}, calStack...)
+			calStack = append(calStack, num)
 		}
 	}
 
@@ -142,5 +137,5 @@ func Evaluate(exp *string) (float64, error) {
 		return 0, errors.New("Syntax error")
 	}
 
-	return calStack[0], nil
+	return calStack[len(calStack)-1], nil
 }

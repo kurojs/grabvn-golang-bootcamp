@@ -13,7 +13,7 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for range c {
-			fmt.Println("Bye bye. See ya!!")
+			fmt.Println("Goodbye and happy coding!!!")
 			os.Exit(0)
 		}
 	}()
