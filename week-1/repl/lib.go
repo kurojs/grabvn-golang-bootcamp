@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -22,27 +21,13 @@ func getPriority(param string) int {
 	}
 }
 
-func isOperator(op string) bool {
+func isValidOperator(op string) bool {
 	switch op {
 	case "+", "-", "*", "/":
 		return true
 	default:
 		return false
 	}
-}
-
-func normalization(exp string) string {
-	space := regexp.MustCompile(`\s+`)
-	s := space.ReplaceAllString(exp, " ")
-	return strings.Trim(s, " ")
-}
-
-func getNumber(str string) (num float64, err error) {
-	num, err = strconv.ParseFloat(str, 10)
-	if err != nil {
-		err = errors.New("Invalid input")
-	}
-	return
 }
 
 func cal(firstNum, secondNum float64, op string) (float64, error) {
@@ -67,8 +52,7 @@ func cal(firstNum, secondNum float64, op string) (float64, error) {
 
 // Evaluate calculate result from user expression
 func Evaluate(exp *string) (float64, error) {
-	*exp = normalization(*exp)
-	params := strings.Split(*exp, " ")
+	params := strings.Fields(*exp)
 	stack := make([]string, 0)
 	postfix := make([]string, 0)
 
@@ -109,7 +93,7 @@ func Evaluate(exp *string) (float64, error) {
 	// Calculate on postfix
 	calStack := make([]float64, 0)
 	for _, param := range postfix {
-		if isOperator(param) {
+		if isValidOperator(param) {
 			if len(calStack) < 2 {
 				return 0, errors.New("Syntax error")
 			}
@@ -125,7 +109,7 @@ func Evaluate(exp *string) (float64, error) {
 
 			calStack = append(calStack, result)
 		} else {
-			num, err := getNumber(param)
+			num, err := strconv.ParseFloat(param, 10)
 			if err != nil {
 				return 0, err
 			}
