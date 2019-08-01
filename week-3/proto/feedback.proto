@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package proto;
+
+service PassengerFeedbackService {
+    rpc AddFeedback (AddFeedbackRequest) returns (AddFeedbackResponse) {};
+    rpc GetFeedbackByPassengerID (GetFeedbackByPassengerIDRequest) returns (GetFeedbackByPassengerIDResponse) {};
+    rpc GetFeedbackByBookingCode (GetFeedbackByBookingCodeRequest) returns (GetFeedbackByBookingCodeResponse) {};
+    rpc DeleteFeedbackByPassengerID (DeleteFeedbackByPassengerIDRequest) returns (DeleteFeedbackByPassengerIDResponse);
+}
+
+message PassengerFeedback {
+    string bookingCode = 1;
+    int32 passengerID = 2;
+    string feedback = 3;
+}
+
+message AddFeedbackRequest {
+    string bookingCode = 1;
+    int32 passengerID = 2;
+    string feedback = 3;
+}
+
+message AddFeedbackResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+}
+
+message GetFeedbackByPassengerIDRequest {
+    int32 passengerID = 1;
+}
+
+message GetFeedbackByPassengerIDResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+    repeated PassengerFeedback feedbacks = 3;
+}
+
+message GetFeedbackByBookingCodeRequest {
+    string bookingCode = 1;
+}
+
+message GetFeedbackByBookingCodeResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+    PassengerFeedback feedback = 3;
+}
+
+message DeleteFeedbackByPassengerIDRequest {
+    int32 passengerID = 1;
+}
+
+message DeleteFeedbackByPassengerIDResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2;
+}
+
+
