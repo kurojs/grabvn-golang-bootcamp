@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/kurojs/grabvn-golang-bootcamp/week-3/server/grpc"
-	"github.com/kurojs/grabvn-golang-bootcamp/week-3/server/http"
+	"github.com/kurojs/grabvn-golang-bootcamp/exercise/user-manament/server/grpc"
+	"github.com/kurojs/grabvn-golang-bootcamp/exercise/user-manament/server/http"
 )
 
 func main() {

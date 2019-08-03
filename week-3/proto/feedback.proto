@@ -1,12 +1,29 @@
 syntax = "proto3";
-
 package proto;
 
+import "google/api/annotations.proto";
+
 service PassengerFeedbackService {
-    rpc AddFeedback (AddFeedbackRequest) returns (AddFeedbackResponse) {};
-    rpc GetFeedbackByPassengerID (GetFeedbackByPassengerIDRequest) returns (GetFeedbackByPassengerIDResponse) {};
-    rpc GetFeedbackByBookingCode (GetFeedbackByBookingCodeRequest) returns (GetFeedbackByBookingCodeResponse) {};
-    rpc DeleteFeedbackByPassengerID (DeleteFeedbackByPassengerIDRequest) returns (DeleteFeedbackByPassengerIDResponse);
+    rpc AddFeedback (AddFeedbackRequest) returns (AddFeedbackResponse) {
+        option (google.api.http) = {
+            post: "/feedback",
+        };
+    };
+    rpc GetFeedbackByPassengerID (GetFeedbackByPassengerIDRequest) returns (GetFeedbackByPassengerIDResponse) {
+        option (google.api.http) = {
+            get: "/feedback/passenger/{passengerID}",
+        };
+    };
+    rpc GetFeedbackByBookingCode (GetFeedbackByBookingCodeRequest) returns (GetFeedbackByBookingCodeResponse) {
+        option (google.api.http) = {
+            get: "/feedback/booking/{bookingCode}",
+        };
+    };
+    rpc DeleteFeedbackByPassengerID (DeleteFeedbackByPassengerIDRequest) returns (DeleteFeedbackByPassengerIDResponse) {
+        option (google.api.http) = {
+            delete: "/feedback/passenger/{passengerID}",
+        };
+    };
 }
 
 message PassengerFeedback {
