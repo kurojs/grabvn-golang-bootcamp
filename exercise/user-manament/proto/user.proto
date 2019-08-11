@@ -1,0 +1,78 @@
+syntax = "proto3";
+package proto;
+
+import "google/api/annotations.proto";
+
+service UserService {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/user",
+            body: "*",
+        };
+    };
+    rpc ListUser (ListUserRequest) returns (ListUserResponse) {
+        option (google.api.http) = {
+            get: "/users",
+        };
+    };
+    rpc GetUserDetail (GetUserDetailRequest) returns (GetUserDetailResponse) {
+        option (google.api.http) = {
+            get: "/user/{userID}",
+        };
+    };
+    rpc UpdateUserDetail (UpdateUserDetailRequest) returns (UpdateUserDetailResponse) {
+        option (google.api.http) = {
+            put: "/user/{userID}",
+            body: "*",
+        };
+    };
+    rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse) {
+        option (google.api.http) = {
+            delete: "/user/{userID}",
+        };
+    };
+}
+
+message User {
+    int32 ID = 1;
+    string username = 2;
+}
+
+message CreateUserRequest {
+    User user = 1;
+}
+
+message CreateUserResponse {
+    int32 userID = 1;
+}
+
+message ListUserRequest {}
+
+message ListUserResponse {
+    repeated User users = 1;
+}
+
+message GetUserDetailRequest {
+    int32 userID = 1;
+}
+
+message GetUserDetailResponse {
+    User user = 1;
+}
+
+message UpdateUserDetailRequest {
+    int32 userID = 1;
+    User user = 2;
+}
+
+message UpdateUserDetailResponse {
+    int32 userID = 1;
+}
+
+message DeleteUserRequest {
+    int32 userID = 1;
+}
+
+message DeleteUserResponse {
+    int32 userID = 1;
+}

@@ -1,0 +1,75 @@
+syntax = "proto3";
+package proto;
+
+import "google/api/annotations.proto";
+
+service PassengerFeedbackService {
+    rpc AddFeedback (AddFeedbackRequest) returns (AddFeedbackResponse) {
+        option (google.api.http) = {
+            post: "/feedback",
+        };
+    };
+    rpc GetFeedbackByPassengerID (GetFeedbackByPassengerIDRequest) returns (GetFeedbackByPassengerIDResponse) {
+        option (google.api.http) = {
+            get: "/feedback/passenger/{passengerID}",
+        };
+    };
+    rpc GetFeedbackByBookingCode (GetFeedbackByBookingCodeRequest) returns (GetFeedbackByBookingCodeResponse) {
+        option (google.api.http) = {
+            get: "/feedback/booking/{bookingCode}",
+        };
+    };
+    rpc DeleteFeedbackByPassengerID (DeleteFeedbackByPassengerIDRequest) returns (DeleteFeedbackByPassengerIDResponse) {
+        option (google.api.http) = {
+            delete: "/feedback/passenger/{passengerID}",
+        };
+    };
+}
+
+message PassengerFeedback {
+    string bookingCode = 1;
+    int32 passengerID = 2;
+    string feedback = 3;
+}
+
+message AddFeedbackRequest {
+    string bookingCode = 1;
+    int32 passengerID = 2;
+    string feedback = 3;
+}
+
+message AddFeedbackResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+}
+
+message GetFeedbackByPassengerIDRequest {
+    int32 passengerID = 1;
+}
+
+message GetFeedbackByPassengerIDResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+    repeated PassengerFeedback feedbacks = 3;
+}
+
+message GetFeedbackByBookingCodeRequest {
+    string bookingCode = 1;
+}
+
+message GetFeedbackByBookingCodeResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2; 
+    PassengerFeedback feedback = 3;
+}
+
+message DeleteFeedbackByPassengerIDRequest {
+    int32 passengerID = 1;
+}
+
+message DeleteFeedbackByPassengerIDResponse {
+    int32 returnCode = 1;
+    string returnMessage = 2;
+}
+
+
